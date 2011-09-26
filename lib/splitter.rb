@@ -8,16 +8,14 @@ module Splitter
       start_wrapper = options[:start_wrapper] || (raise ArgumentError, "A starting wrapper tag (:start_wrapper) must be provided.")
       end_wrapper = options[:end_wrapper] || (raise ArgumentError, "An ending wrapper tag (:end_wrapper) must be provided.")
       splitter = options[:splitter] || (raise ArgumentError, "A splitter tag (:splitter) must be provided.")
+      splitter = "</#{splitter}>" unless splitter =~ /\<\/.+\>/
       batch_size = options[:batch_size] || DEFAULT_BATCH_SIZE
 
       s = ""
       count = 0
       File.open(filename) do |f|
         while(line = f.read(1024))
-          match = false
-
           while(i = line.index(splitter))
-            match = true
             count += 1
             s << "#{line[0...i]}#{splitter}"
 
